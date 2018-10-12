@@ -73,56 +73,67 @@ hover = HoverTool(
         'timestamp': 'datetime',
     },
 )
-p_mox = figure(plot_height=int(0.7 * plot_height), plot_width=plot_width, tools=tool_str)
-p_hygro = figure(plot_height=int(0.3 * plot_height), plot_width=plot_width, tools=tool_str, x_range=p_mox.x_range)
+p_tvoc = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str)
+p_co2 = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str, x_range=p_tvoc.x_range)
 
+p_temp = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range)
+p_rh = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range)
 
-p_mox.toolbar.logo = None
-p_hygro.toolbar.logo = None
+p_tvoc.toolbar.logo = None
+p_co2.toolbar.logo = None
+p_temp.toolbar.logo = None
+p_rh.toolbar.logo = None
 
-colums2plot = []
-for c in list(df.columns):
-    if not c.find(BOX_params) != -1:
-        if not c.find(TEMP) != -1:
-            if not c.find(HUM) != -1:
-                p_mox.line(x=TIME, y=c, source=source, legend=dict(value=c), name=c)
+for col in list(df.columns):
+    try:
+        color = color_id[col.split('_')[0]]
+    except KeyError:
+        pass
 
+    if col.find(tVOC) != -1:
+        p_tvoc.line(x=TIME, y=col, source=source, legend=dict(value=col), name=col, color=color)
+    elif col.find(CO2) != -1:
+        p_co2.line(x=TIME, y=col, source=source, legend=dict(value=col), name=col, color=color)
+    elif col.find(TEMP) != -1:
+        color = "red"
+        p_temp.line(x=TIME, y=col, source=source, legend=dict(value=col), name=col, color=color)
+    elif col.find(HUM) != -1:
+        color = "green"
+        p_rh.line(x=TIME, y=col, source=source, legend=dict(value=col), name=col, color=color)
 
-p_mox.xaxis.major_tick_line_color = None  # turn off x-axis major ticks
-p_mox.xaxis.minor_tick_line_color = None  # turn off x-axis minor ticks
-p_mox.xaxis.major_label_text_font_size = '0pt'
+p_tvoc.xaxis.major_tick_line_color = None  # turn off x-axis major ticks
+p_tvoc.xaxis.minor_tick_line_color = None  # turn off x-axis minor ticks
+p_tvoc.xaxis.major_label_text_font_size = '0pt'
 
 y_fmt = ["%F"]
 h_fmt = ["%d/%m %T"]
+p_co2.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
+                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               months=y_fmt, years=y_fmt)
+p_temp.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
+                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               months=y_fmt, years=y_fmt)
+p_rh.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
+                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               months=y_fmt, years=y_fmt)
 
-for c in list(df.columns):
-    if c.find(TEMP) != -1:
-        p_hygro.line(x=TIME, y=c, color="red", source=source, legend=dict(value=c), name=c)
-    if c.find(HUM) != -1:
-        p_hygro.extra_y_ranges = {"extra_y": Range1d(start=30, end=60)}
-        p_hygro.line(x=TIME, y=c, color="green", source=source, legend=dict(value=c), y_range_name="extra_y", name=c)
-        y2_axis = LinearAxis(y_range_name="extra_y")
-        p_hygro.add_layout(y2_axis, 'right')
 
+p_temp.legend.location = "top_left"
+p_temp.legend.click_policy = "hide"
 
-p_hygro.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
-                                                hourmin=y_fmt, hours=y_fmt, days=y_fmt,
-                                                months=y_fmt, years=y_fmt)
+p_tvoc.legend.location = "top_left"
+p_tvoc.legend.click_policy = "hide"
 
-p_hygro.legend.location = "top_left"
-p_hygro.legend.click_policy = "hide"
+p_temp.xaxis.major_tick_line_color = None
+p_temp.xaxis.minor_tick_line_color = None
 
-p_mox.legend.location = "top_left"
-p_mox.legend.click_policy = "hide"
-
-p_hygro.xaxis.major_tick_line_color = None
-p_hygro.xaxis.minor_tick_line_color = None
-
-p_mox.add_tools(hover)
-p_hygro.add_tools(hover)
+p_tvoc.add_tools(hover)
+p_co2.add_tools(hover)
+p_temp.add_tools(hover)
+p_rh.add_tools(hover)
 
 #DIVS
-div = Div(text="""<h1 style="text-align: center;">DT481 - MOx Data Processing Dashboard</h1>""", width=1000, height=50)
+div = Div(text="""<h2 style="text-align: left;">DT481 - MOx Data Processing Dashboard</h2>""", width=plot_width, height=20)
 
 
 def auto_update():
@@ -185,7 +196,7 @@ date_end_select.on_change('value', lambda attr, old, new: update_date_end())
 
 l = layout([
     [div],
-    [controls, [p_mox, p_hygro]]
+    [controls, [p_tvoc, p_co2, [p_temp, p_rh]]]
 ])
 
 update()
@@ -194,5 +205,5 @@ curdoc().add_root(l)
 curdoc().title = "DT481 - Mox Sensor Dash Board"
 
 curdoc().add_periodic_callback(auto_update, 30000)
-#output_file("MoxBoxServer.html")
-#show(l)
+output_file("MoxBoxServer.html")
+show(l)
