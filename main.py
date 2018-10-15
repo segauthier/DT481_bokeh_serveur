@@ -117,15 +117,20 @@ p_rh.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minute
                                                hourmin=y_fmt, hours=y_fmt, days=y_fmt,
                                                months=y_fmt, years=y_fmt)
 
+p_tvoc.legend.location = "top_left"
+p_tvoc.legend.click_policy = "hide"
+
+p_co2.legend.location = "top_left"
+p_co2.legend.click_policy = "hide"
+
+p_rh.legend.location = "top_left"
+p_rh.legend.click_policy = "hide"
 
 p_temp.legend.location = "top_left"
 p_temp.legend.click_policy = "hide"
 
-p_tvoc.legend.location = "top_left"
-p_tvoc.legend.click_policy = "hide"
-
-p_temp.xaxis.major_tick_line_color = None
-p_temp.xaxis.minor_tick_line_color = None
+#p_temp.xaxis.major_tick_line_color = None
+#p_temp.xaxis.minor_tick_line_color = None
 
 p_tvoc.add_tools(hover)
 p_co2.add_tools(hover)
@@ -133,14 +138,12 @@ p_temp.add_tools(hover)
 p_rh.add_tools(hover)
 
 #DIVS
-div = Div(text="""<h2 style="text-align: left;">DT481 - MOx Data Processing Dashboard</h2>""", width=plot_width, height=20)
-
+div = Div(text="""  <h1 style="text-align: left;"> <img src="Groupe_SEB_-_Logo.svg" alt="logo_seb" height="50px"> DT481 - MOx Data Processing Dashboard</h1>""", width=plot_width, height=50)
 
 def auto_update():
     print("auto-update")
     get_ddf()
     update()
-
 
 def update_sensor_data():
     global dates_ls
