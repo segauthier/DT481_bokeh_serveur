@@ -88,6 +88,7 @@ for col in list(df.columns):
     try:
         color = color_id[col.split('_')[0]]
     except KeyError:
+        color = "blue"  # CO2 ref
         pass
 
     if col.find(tVOC) != -1:
@@ -138,9 +139,7 @@ p_temp.add_tools(hover)
 p_rh.add_tools(hover)
 
 #DIVS
-logo_path = os.path.join(os.path.join(dir_path,  'static'), 'seb_logo.png')
-#logo_path = 'seb_logo.png'
-#logo_path = '/DT481_bokeh_serveur/static/seb_logo.png'
+logo_path = '/DT481_bokeh_serveur/static/seb_logo.png'
 logo_str = '<img src= "{}" alt="{}" height="50px">'.format(logo_path, logo_path)
 div_str = """ <h1 style="text-align: left"> {}  &ensp; DT481 - MOx Data Processing Dashboard</h1>""".format(logo_str)
 print(div_str)
