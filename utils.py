@@ -9,8 +9,8 @@ import os
 # The box data file should be identical to the one used in the wipy.lib folder
 from box_data_template import *
 
-plot_width = 1400
-plot_height = 800
+plot_width = 1600
+plot_height = 850
 
 tool_str = 'pan,box_zoom,reset'
 

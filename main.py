@@ -138,7 +138,12 @@ p_temp.add_tools(hover)
 p_rh.add_tools(hover)
 
 #DIVS
-div = Div(text="""  <h1 style="text-align: left;"> <img src="seb_logo.svg" alt="logo_seb" height="50px"> DT481 - MOx Data Processing Dashboard</h1>""", width=plot_width, height=50)
+logo_path = os.path.join(dir_path,  "seb_logo.svg")
+logo_str = '<img src= "' + logo_path + '" alt="logo_seb" height="50px">'
+div_str = """ <h1 style="text-align: left"> {}  &ensp; DT481 - MOx Data Processing Dashboard</h1>""".format(logo_str)
+print(div_str)
+
+div = Div(text=div_str, width=plot_width, height=50)
 
 def auto_update():
     print("auto-update")
