@@ -138,9 +138,9 @@ p_temp.add_tools(hover)
 p_rh.add_tools(hover)
 
 #DIVS
-logo_path = os.path.join(dir_path,  '"seb_logo.png"')
-#logo_path = '"seb_logo.png"'
-logo_str = '<img src= {} alt={} height="50px">'.format(logo_path, logo_path)
+logo_path = os.path.join(dir_path,  'seb_logo.png')
+#logo_path = 'seb_logo.png'
+logo_str = '<img src= "{}" alt="{}" height="50px">'.format(logo_path, logo_path)
 div_str = """ <h1 style="text-align: left"> {}  &ensp; DT481 - MOx Data Processing Dashboard</h1>""".format(logo_str)
 print(div_str)
 
