@@ -9,8 +9,8 @@ import os
 # The box data file should be identical to the one used in the wipy.lib folder
 from box_data_template import *
 
-plot_width = 1600
-plot_height = 850
+plot_width = 1800
+plot_height = 880
 
 tool_str = 'pan,box_zoom,reset'
 
@@ -18,7 +18,7 @@ scale_factor = 5/100
 scale_up = 1+scale_factor
 scale_down = 1-scale_factor
 
-color_id = {BME680: "navy", SGP30: "crimson", CCS811: "seagreen"}
+color_id = {BME680: "darkviolet", SGP30: "olive", CCS811: "skyblue"}
 
 dir_path = path.dirname(path.realpath(__file__))
 data_path = path.join(dir_path, "data")
