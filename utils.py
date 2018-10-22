@@ -28,8 +28,11 @@ sample_fz = {"1s": "1S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T",
 sample_fz_ls = list(sample_fz.keys())
 
 
-
 # CONTROLS
+def get_csv_file(curr_sensor, curr_date):
+    return path.join(path.join(data_path, curr_sensor), curr_sensor + '_' + curr_date + '.csv')
+
+
 def get_box_ls():
     box_ls = []
     for f in os.listdir(data_path):
@@ -37,6 +40,14 @@ def get_box_ls():
         if f[0]!='.':
             box_ls.append(f)           
     return box_ls
+
+
+def get_dates(curr_sensor):
+    moxbox_folder = os.path.join(data_path, curr_sensor)
+    files = [f for f in os.listdir(moxbox_folder) if os.path.isfile(os.path.join(moxbox_folder, f))]
+    dates_ls_temp = [f.split("_")[1].split(".")[0] for f in files]
+    dates_ls_temp.sort()
+    return dates_ls_temp
 
 
 

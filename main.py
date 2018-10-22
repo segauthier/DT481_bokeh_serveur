@@ -1,5 +1,4 @@
 
-import dask.dataframe as dd
 import pandas as pd
 from bokeh.io import output_file, show
 from bokeh.layouts import row, widgetbox, column, layout
@@ -12,56 +11,43 @@ from os import path
 
 from utils import *
 
-sensor_select = Select(title='Sensor', value=get_box_ls()[0], options=get_box_ls())
-ddf = dd.read_csv(path.join(path.join(data_path, sensor_select.value), sensor_select.value + '*.csv'),
-                  delimiter="\t", parse_dates=['timestamp']).set_index(TIME)
-ddf.compute()
+
+
 dates_ls = []
 
+sensor_select = Select(title='Sensor', value=get_box_ls()[0], options=get_box_ls())
+curr_sensor = sensor_select.value
 
-def get_dates():
-    moxbox_folder = os.path.join(data_path, sensor_select.value)
-    files = [f for f in os.listdir(moxbox_folder) if os.path.isfile(os.path.join(moxbox_folder, f))]
-    dates_ls_temp = [f.split("_")[1].split(".")[0] for f in files]
-    dates_ls_temp.sort()
-    return dates_ls_temp
+date_select = Select(title='Date', value=get_dates(curr_sensor)[-1], options=get_dates(curr_sensor))
+curr_date = date_select.value
+
+fz_select = Select(title='Period', value=sample_fz_ls[0], options=sample_fz_ls)
+
+df = pd.read_csv(get_csv_file(curr_sensor, curr_date), delimiter="\t", parse_dates=['timestamp']).set_index(TIME)
 
 
-def get_ddf():
-    global ddf
-    curr_path = path.join(data_path, sensor_select.value)
-    ddf = dd.read_csv(path.join(curr_path, sensor_select.value + '*.csv'),
-                      delimiter="\t", parse_dates=['timestamp']).set_index(TIME)
+def get_df():
+    global df
+    df = pd.read_csv(get_csv_file(curr_sensor, curr_date), delimiter="\t", parse_dates=['timestamp']).set_index(TIME)
+    filter_df()
 
 
 def filter_df():
-    global ddf
-    # Select time period
-    start = pd.to_datetime(date_start_select.value)
-    end = pd.to_datetime(date_end_select.value) + pd.to_timedelta(1, 'D')
-    ddf_filter = ddf[start:end]
-    
+    global df
     # Resample dataframe
-    #print(fz_select.value)
+    print(fz_select.value)
     resample_fz = sample_fz[fz_select.value]
-    ddf_filter = ddf_filter.resample(resample_fz).mean()
+    df = df.resample(resample_fz).mean()
 
     # TODO : change the temp with right column to filter
-    ddf_filter = ddf_filter[ddf_filter[BOX_params+'_'+BOX_ID].notnull()]
-
-    df_update = ddf_filter.compute()
-    df_update.index.rename(TIME, inplace=True)
-    return df_update
+    df = df[df[BOX_params+'_'+BOX_ID].notnull()]
+    df.index.rename(TIME, inplace=True)
 
 
-fz_select = Select(title='Period', value=sample_fz_ls[0], options=sample_fz_ls)
-date_start_select = Select(title='Start date', value=get_dates()[0], options=get_dates())
-date_end_select = Select(title='End date (+24h)', value=get_dates()[-1], options=get_dates())
-
-controls = widgetbox([sensor_select, fz_select, date_start_select, date_end_select], width=200)
+controls = widgetbox([sensor_select, fz_select, date_select], width=200)
 
 #GRAPHS
-df = filter_df()
+filter_df()
 source = ColumnDataSource(df)
 
 hover = HoverTool(
@@ -142,51 +128,43 @@ p_rh.add_tools(hover)
 logo_path = '/DT481_bokeh_serveur/static/seb_logo.png'
 logo_str = '<img src= "{}" alt="{}" height="50px">'.format(logo_path, logo_path)
 div_str = """ <h1 style="text-align: left"> {}  &ensp; DT481 - MOx Data Processing Dashboard</h1>""".format(logo_str)
-print(div_str)
 
+
+#div_str = """  <h1 style="text-align: left"> DT481 - MOx Data Processing Dashboard</h1> """
 div = Div(text=div_str, width=plot_width, height=50)
 
 def auto_update():
     print("auto-update")
-    get_ddf()
-    update()
-
-def update_sensor_data():
-    global dates_ls
-    dates_ls = get_dates()
-    date_start_select.options = dates_ls
-    date_end_select.options = dates_ls
-    date_start_select.value = dates_ls[0]
-    date_end_select.value = dates_ls[-1]
-    get_ddf()
+    get_df()
     update()
 
 
-def update_date_start():
+def update_sensor():
+    global curr_sensor
+    global curr_date
+    curr_sensor = sensor_select.value
+    sensor_select.options = get_box_ls()
+    date_select.options = get_dates()
+    curr_date = get_dates()[-1]
+    update()
+
+def update_date():
     global dates_ls
-    dates_ls = get_dates()
-    if (date_start_select.value in dates_ls) and (date_end_select.value in dates_ls):
-        if dates_ls.index(date_start_select.value) > dates_ls.index(date_end_select.value):
-            date_end_select.value = dates_ls[-1]
-        print("date update")
-        update()
+    global curr_date
+    curr_date = date_select.value
+    date_select.options = get_dates(curr_sensor)
+    update()
 
 
-def update_date_end():
-    global dates_ls
-    dates_ls = get_dates()
-    if (date_start_select.value in dates_ls) and (date_end_select.value in dates_ls):
-        if dates_ls.index(date_start_select.value) > dates_ls.index(date_end_select.value):
-            date_start_select.value = dates_ls[0]
-        print("date update")
-        update()
+def update_fz():
+    update()
 
 
 def update():
     print("update")
-    df_update = filter_df()
-    df_update_dict = df_update.to_dict(orient="list")
-    df_update_dict[TIME] = list(df_update.index.values)
+    get_df()
+    df_update_dict = df.to_dict(orient="list")
+    df_update_dict[TIME] = list(df.index.values)
     # source.data = {
     #     TIME: df_update.index,
     #     TEMP: df_update[TEMP],
@@ -195,13 +173,12 @@ def update():
     #     PRES: df_update[PRES],
     # }
     source.data = df_update_dict
-    sensor_select.options = get_box_ls()
 
 
-sensor_select.on_change('value', lambda attr, old, new: update_sensor_data())
-fz_select.on_change('value', lambda attr, old, new: update())
-date_start_select.on_change('value', lambda attr, old, new: update_date_start())
-date_end_select.on_change('value', lambda attr, old, new: update_date_end())
+sensor_select.on_change('value', lambda attr, old, new: update_sensor())
+fz_select.on_change('value', lambda attr, old, new: update_fz())
+date_select.on_change('value', lambda attr, old, new: update_date())
+
 
 l = layout([
     [div],
