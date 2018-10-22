@@ -23,8 +23,8 @@ color_id = {BME680: "darkviolet", SGP30: "olive", CCS811: "skyblue"}
 dir_path = path.dirname(path.realpath(__file__))
 data_path = path.join(dir_path, "data")
 
-sample_fz = {"1s": "1S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T",
-             "10min": "10T", "30min": "30T", "1h": "1H", "4h": "4H", "1j": "1D", "1sem": "1W"}
+sample_fz = {"1s": "1S", "3s": "3S", "5s": "5S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T",
+             "10min": "10T", "30min": "30T", "1h": "1H"}
 sample_fz_ls = list(sample_fz.keys())
 
 
