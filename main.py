@@ -94,13 +94,13 @@ p_tvoc.xaxis.major_label_text_font_size = '0pt'
 y_fmt = ["%F"]
 h_fmt = ["%d/%m %T"]
 p_co2.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
-                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               hourmin=h_fmt, hours=h_fmt, days=h_fmt,
                                                months=y_fmt, years=y_fmt)
 p_temp.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
-                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               hourmin=h_fmt, hours=h_fmt, days=h_fmt,
                                                months=y_fmt, years=y_fmt)
 p_rh.xaxis.formatter = DatetimeTickFormatter(seconds=h_fmt, minsec=h_fmt, minutes=h_fmt,
-                                               hourmin=y_fmt, hours=y_fmt, days=y_fmt,
+                                               hourmin=h_fmt, hours=h_fmt, days=h_fmt,
                                                months=y_fmt, years=y_fmt)
 
 p_tvoc.legend.location = "top_left"
