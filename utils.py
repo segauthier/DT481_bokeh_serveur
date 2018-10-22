@@ -50,24 +50,10 @@ def get_dates(curr_sensor):
     return dates_ls_temp
 
 
-
 BME680_data = {IAQ: 0, IAQ_ACC: 0, TEMP: 0, HUM: 0, PRES: 0, GAS: 0}
 box_data = {BOX_ID: 0, BME680: BME680_data}
 
 dir_path = path.dirname(path.realpath(__file__))
 data_path = path.join(dir_path, "data")
 
-
-sample_fz = {"1s": "1S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T",
-             "10min": "10T", "30min": "30T", "1h": "1H", "4h": "4H", "1j": "1D", "1sem": "1W"}
-sample_fz_ls = list(sample_fz.keys())
-
-
-# CONTROLS
-def get_box_ls():
-    box_ls = []
-    for (dirpath, dirnames, filenames) in os.walk(data_path):
-        if (dirpath == data_path):
-            box_ls = dirnames.copy()
-    return box_ls
 
