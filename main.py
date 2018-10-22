@@ -35,7 +35,6 @@ def get_df():
 def filter_df():
     global df
     # Resample dataframe
-    print(fz_select.value)
     resample_fz = sample_fz[fz_select.value]
     df = df.resample(resample_fz).mean()
 
@@ -142,6 +141,7 @@ def auto_update():
 def update_sensor():
     global curr_sensor
     global curr_date
+    print("sensor update")
     curr_sensor = sensor_select.value
     sensor_select.options = get_box_ls()
     date_select.options = get_dates()
@@ -151,17 +151,19 @@ def update_sensor():
 def update_date():
     global dates_ls
     global curr_date
+    print("date update")
     curr_date = date_select.value
     date_select.options = get_dates(curr_sensor)
     update()
 
 
 def update_fz():
+    print("sampling update")
     update()
 
 
 def update():
-    print("update")
+    print("sensor: " + curr_sensor + ", date: " + curr_date + ", sampling: " + fz_select.value)
     get_df()
     df_update_dict = df.to_dict(orient="list")
     df_update_dict[TIME] = list(df.index.values)
