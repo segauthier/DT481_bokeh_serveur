@@ -135,6 +135,7 @@ div = Div(text=div_str, width=plot_width, height=50)
 def auto_update():
     print("auto-update")
     get_df()
+    date_select.options = get_dates(curr_sensor)
     update()
 
 
