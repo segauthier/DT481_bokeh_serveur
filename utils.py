@@ -37,8 +37,9 @@ def get_box_ls():
     for f in os.listdir(data_path):
         # remove the hidden folders
         if f[0] != '.':
-            box_ls.append(f)           
-    return box_ls.sort()
+            box_ls.append(f)
+    box_ls.sort()
+    return box_ls
 
 
 def get_dates(curr_sensor):
