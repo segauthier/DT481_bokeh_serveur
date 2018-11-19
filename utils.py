@@ -23,8 +23,7 @@ color_id = {BME680: "darkviolet", SGP30: "olive", CCS811: "skyblue"}
 dir_path = path.dirname(path.realpath(__file__))
 data_path = path.join(dir_path, "data")
 
-sample_fz = {"1s": "1S", "3s": "3S", "5s": "5S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T",
-             "10min": "10T", "30min": "30T", "1h": "1H"}
+sample_fz = {"5s": "5S", "10s": "10S", "30s": "30S", "1min": "1T", "5min": "5T", "10min": "10T", "30min": "30T", "1h": "1H"}
 sample_fz_ls = list(sample_fz.keys())
 
 
@@ -37,9 +36,9 @@ def get_box_ls():
     box_ls = []
     for f in os.listdir(data_path):
         # remove the hidden folders
-        if f[0]!='.':
+        if f[0] != '.':
             box_ls.append(f)           
-    return box_ls
+    return box_ls.sort()
 
 
 def get_dates(curr_sensor):
