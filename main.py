@@ -132,6 +132,7 @@ div_str = """ <h1 style="text-align: left"> {}  &ensp; DT481 - MOx Data Processi
 #div_str = """  <h1 style="text-align: left"> DT481 - MOx Data Processing Dashboard</h1> """
 div = Div(text=div_str, width=plot_width, height=50)
 
+
 def auto_update():
     print("auto-update")
     get_df()
@@ -145,9 +146,10 @@ def update_sensor():
     print("sensor update")
     curr_sensor = sensor_select.value
     sensor_select.options = get_box_ls()
-    date_select.options = get_dates()
-    curr_date = get_dates()[-1]
+    date_select.options = get_dates(curr_sensor)
+    curr_date = get_dates(curr_sensor)[-1]
     update()
+
 
 def update_date():
     global dates_ls
