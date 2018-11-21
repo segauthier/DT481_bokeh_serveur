@@ -61,11 +61,11 @@ hover = HoverTool(
         'timestamp': 'datetime',
     },
 )
-p_tvoc = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str)
-p_co2 = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str, x_range=p_tvoc.x_range)
+p_tvoc = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str, x_axis_type="datetime")
+p_co2 = figure(plot_height=int(int(0.35 * plot_height)), plot_width=plot_width, tools=tool_str, x_range=p_tvoc.x_range, x_axis_type="datetime")
 
-p_temp = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range)
-p_rh = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range)
+p_temp = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range, x_axis_type="datetime")
+p_rh = figure(plot_height=int(int(0.3 * plot_height)), plot_width=int(plot_width/2), tools=tool_str, x_range=p_tvoc.x_range, x_axis_type="datetime")
 
 p_tvoc.toolbar.logo = None
 p_co2.toolbar.logo = None
@@ -182,8 +182,8 @@ def update():
     # }
     source.data = df_update_dict
     print("range:")
-    print(p_tvoc.x_range)
-    print(p_tvoc.y_range)
+    print(p_tvoc.x_range.bounds)
+    print(p_tvoc.y_range.bounds)
 
 
 sensor_select.on_change('value', lambda attr, old, new: update_sensor())
