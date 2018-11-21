@@ -7,11 +7,16 @@ from bokeh.models.formatters import DatetimeTickFormatter
 from bokeh.models import LinearAxis, Range1d
 from bokeh.plotting import curdoc, figure
 from bokeh.models import ColumnDataSource, HoverTool
+from bokeh.util import session_id
+
 from os import path
+
 
 from utils import *
 
-
+bokeh_key = session_id.generate_session_id()
+cmd = r"export BOKEH_SECRET_KEY={}".format(bokeh_key)
+print(cmd)
 
 dates_ls = []
 
@@ -37,8 +42,6 @@ def filter_df():
     # Resample dataframe
     resample_fz = sample_fz[fz_select.value]
     df = df.resample(resample_fz).mean()
-
-    # TODO : change the temp with right column to filter
     df = df[df[BOX_params+'_'+BOX_ID].notnull()]
     df.index.rename(TIME, inplace=True)
 
@@ -178,6 +181,9 @@ def update():
     #     PRES: df_update[PRES],
     # }
     source.data = df_update_dict
+    print("range:")
+    print(p_tvoc.x_range)
+    print(p_tvoc.y_range)
 
 
 sensor_select.on_change('value', lambda attr, old, new: update_sensor())
