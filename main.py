@@ -181,9 +181,7 @@ def update():
     #     PRES: df_update[PRES],
     # }
     source.data = df_update_dict
-    print("range:")
-    print(p_tvoc.x_range.bounds)
-    print(p_tvoc.y_range.bounds)
+
 
 
 sensor_select.on_change('value', lambda attr, old, new: update_sensor())
