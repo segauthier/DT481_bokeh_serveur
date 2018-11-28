@@ -149,9 +149,10 @@ def update_sensor():
     print("sensor update")
     curr_sensor = sensor_select.value
     sensor_select.options = get_box_ls()
-    date_select.options = get_dates(curr_sensor)
+
     curr_date = get_dates(curr_sensor)[-1]
     date_select.value = curr_date
+    date_select.options = get_dates(curr_sensor)
     update()
 
 
